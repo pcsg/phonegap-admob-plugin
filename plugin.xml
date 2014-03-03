@@ -3,11 +3,11 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="com.google.cordova.plugin.AdMobPlugin"
         version="0.0.2">
-    
+
     <name>AdMobPlugin</name>
     <description>Google AdMob Plugin</description>
     <license>MIT</license>
-    
+
     <engines>
         <engine name="cordova" version=">=2.9.0" />
     </engines>
@@ -15,8 +15,8 @@
     <js-module src="www/AdMobPlugin.js" name="AdMob">
         <clobbers target="window.admob"/>
     </js-module>
-    
-    
+
+
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
@@ -25,14 +25,14 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity android:name="com.google.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+            <activity android:name="com.google.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         </config-file>
-        
+
         <source-file src="src/android/libs/GoogleAdMobAdsSdk-6.4.1.jar" target-dir="libs/"/>
         <source-file src="src/android/com/google/cordova/plugin/AdMobPlugin.java" target-dir="src/com/google/cordova/plugin"/>
     </platform>
@@ -43,10 +43,10 @@
                 <param name="ios-package" value="AdMobPlugin" />
             </feature>
         </config-file>
-        
+
         <header-file src="src/ios/AdMobPlugin.h" />
         <source-file src="src/ios/AdMobPlugin.m" />
-        
+
         <!-- Google AdMob header files -->
         <header-file src="src/ios/GADAdMobExtras.h" />
         <header-file src="src/ios/GADAdNetworkExtras.h" />
@@ -57,10 +57,10 @@
         <header-file src="src/ios/GADInterstitialDelegate.h" />
         <header-file src="src/ios/GADRequest.h" />
         <header-file src="src/ios/GADRequestError.h" />
-        
+
         <!-- Google AdMob 6.5.1 framework -->
         <source-file src="src/ios/libGoogleAdMobAds.a" framework="true" />
-        
+
         <!-- iOS development frameworks need by Google AdMob 6.5.1 framework -->
         <framework src="StoreKit.framework" />
         <framework src="AudioToolbox.framework" />
