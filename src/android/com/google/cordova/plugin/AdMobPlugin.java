@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
@@ -119,7 +120,7 @@ public class AdMobPlugin extends CordovaPlugin {
                 } else {
                     adView = new DfpAdView(cordova.getActivity(), adSize, publisherId);
                     adView.setAdListener(new BannerListener());
-                    LinearLayoutSoftKeyboardDetect parentView = (LinearLayoutSoftKeyboardDetect) webView.getParent();
+                    ViewGroup parentView = (ViewGroup) webView.getParent();
                     if (positionAtTop) {
                         parentView.addView(adView, 0);
                     } else {
