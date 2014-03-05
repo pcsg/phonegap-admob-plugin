@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.LinearLayoutSoftKeyboardDetect;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -318,7 +317,7 @@ public class AdMobPlugin extends CordovaPlugin {
                     // Notify the plugin.
                     callbackContext.error("AdView is null.  Did you call createBannerView or already destroy it?");
                 } else {
-                    LinearLayoutSoftKeyboardDetect parentView = (LinearLayoutSoftKeyboardDetect) webView.getParent();
+                    ViewGroup parentView = (ViewGroup) webView.getParent();
                     parentView.removeView(adView);
                     adView.removeAllViews();
                     adView.destroy();
