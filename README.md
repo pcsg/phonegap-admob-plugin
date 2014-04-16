@@ -1,13 +1,11 @@
 cordova-plugin-admob
 ====================
 
-AdMob Phonegap Plugin for Android and iOS
-compatible Phonegap 3.0 CLI
+AdMob Steroids Plugin for Android and iOS.
 
-What is phonegap CLI ?  
-http://docs.phonegap.com/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface  
-How to install plugin whith phonegap CLI : 
-> phonegap local plugin add https://github.com/aliokan/cordova-plugin-admob
+compatible with:
+- Steroids iOS 3.1.5 and higher
+- Steroids Android 3.1.3 and higher
 
 ##Implementation:
 
