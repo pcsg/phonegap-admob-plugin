@@ -6,6 +6,10 @@
 
 @interface AdMobPlugin ()
 
+@property CGRect superViewFrame;
+@property CGRect bannerViewFrame;
+@property UIEdgeInsets webViewContentInsets;
+
 - (void)createGADBannerViewWithPubId:(NSString *)pubId
                           bannerType:(GADAdSize)adSize;
 - (void)createGADInterstitialWithPubId:(NSString *)pubId;
@@ -22,6 +26,8 @@
 @synthesize bannerView = bannerView_;
 @synthesize interstitial = interstitial_;
 
+@synthesize superViewFrame, bannerViewFrame, webViewContentInsets;
+
 #pragma mark Cordova JS bridge
 
 - (CDVPlugin *)initWithWebView:(UIWebView *)theWebView {
@@ -37,6 +43,17 @@
          selector:@selector(deviceOrientationChange:)
          name:UIDeviceOrientationDidChangeNotification
          object:nil];
+        
+        //watch for AGWebViewScrollViewContentInsetChanged notifications for this webview
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(webViewScrollViewContentInsetChanged:)
+         name:@"AGWebViewScrollViewContentInsetChanged"
+         object:theWebView];
+        
+        
+        self.superViewFrame = self.webView.superview.frame;
+        self.webViewContentInsets = [[[self webView] scrollView] contentInset];
     }
 
     return self;
@@ -152,19 +169,8 @@
     NSString *callbackId = command.callbackId;
 
     if(self.bannerView) {
-        CGRect oldBannerViewFrame = self.bannerView.frame;
-        UIEdgeInsets oldWebViewContentInsets = [[[self webView] scrollView] contentInset];
-
-        // Remove effect of banner from webview top content inset
-        int newWebViewContentInsetTop = oldWebViewContentInsets.top - oldBannerViewFrame.size.height;
-
-        UIEdgeInsets newWebViewInsets = UIEdgeInsetsMake(newWebViewContentInsetTop,
-                                                         oldWebViewContentInsets.left,
-                                                         oldWebViewContentInsets.bottom,
-                                                         oldWebViewContentInsets.right);
-
-        [[[self webView] scrollView] setContentInset:newWebViewInsets];
-        [[[self webView] scrollView] setScrollIndicatorInsets:newWebViewInsets];
+        [[[self webView] scrollView] setContentInset:webViewContentInsets];
+        [[[self webView] scrollView] setScrollIndicatorInsets:webViewContentInsets];
 
         [self.bannerView setDelegate:nil];
         [self.bannerView removeFromSuperview];
@@ -223,6 +229,8 @@
     self.bannerView.adUnitID = pubId;
     self.bannerView.delegate = self;
     self.bannerView.rootViewController = self.viewController;
+    
+    self.bannerViewFrame = self.bannerView.frame;
 }
 
 - (void)createGADInterstitialWithPubId:(NSString *)pubId {
@@ -298,77 +306,59 @@
     } else if (adIsSmartBannerLandscape && UIInterfaceOrientationIsPortrait(currentOrientation)) {
         self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
     }
-
-    CGRect oldSuperViewFrame = self.webView.superview.frame;
-    CGRect oldBannerViewFrame = self.bannerView.frame;
-    UIEdgeInsets oldWebViewContentInsets = [[[self webView] scrollView] contentInset];
-
+    
     if (positionAdAtTop_) {
         // Ad is on top of the webview
 
         // iOS7 top contentInset for the webview is the correct spot for banner view origin
-        int oldWebViewContentInsetTop = oldWebViewContentInsets.top;
-        int newBannerViewY = oldSuperViewFrame.origin.y + oldWebViewContentInsetTop;
+        int oldWebViewContentInsetTop = self.webViewContentInsets.top;
+        int newBannerViewY = self.superViewFrame.origin.y + oldWebViewContentInsetTop;
 
-        self.bannerView.frame = CGRectMake(oldSuperViewFrame.origin.x,
+        self.bannerView.frame = CGRectMake(superViewFrame.origin.x,
                                            newBannerViewY,
-                                           oldBannerViewFrame.size.width,
-                                           oldBannerViewFrame.size.height);
+                                           bannerViewFrame.size.width,
+                                           bannerViewFrame.size.height);
 
 
-        int newWebViewContentInsetTop = oldWebViewContentInsetTop + oldBannerViewFrame.size.height;
+        int newWebViewContentInsetTop = oldWebViewContentInsetTop + bannerViewFrame.size.height;
         UIEdgeInsets newWebViewInsets = UIEdgeInsetsMake(newWebViewContentInsetTop,
-                                                         oldWebViewContentInsets.left,
-                                                         oldWebViewContentInsets.bottom,
-                                                         oldWebViewContentInsets.right);
+                                                         webViewContentInsets.left,
+                                                         webViewContentInsets.bottom,
+                                                         webViewContentInsets.right);
 
         [[[self webView] scrollView] setContentInset:newWebViewInsets];
         [[[self webView] scrollView] setScrollIndicatorInsets:newWebViewInsets];
 
-//        webViewFrame.origin.y = bannerViewFrame.size.height;
-//
-//        // Center the banner using the value of the origin.
-//        if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
-//            // The superView has not had its width and height updated yet so use those
-//            // values for the x and y of the new origin respectively.
-//            xLocation = (superViewFrame.size.height - bannerViewFrame.size.width) / 2.0;
-//
-//        } else {
-//            xLocation = (superViewFrame.size.width - bannerViewFrame.size.width) / 2.0;
-//        }
-
     } else {
         // Ad is below the webview
 
-
-//        webViewFrame.origin.y = 0;
-//
-//        // Need to center the banner both horizontally and vertically.
-//        if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
-//            yLocation = superViewFrame.size.width - bannerViewFrame.size.height;
-//            xLocation = (superViewFrame.size.height - bannerViewFrame.size.width) / 2.0;
-//
-//        } else {
-//            yLocation = superViewFrame.size.height - bannerViewFrame.size.height;
-//            xLocation = (superViewFrame.size.width - bannerViewFrame.size.width) / 2.0;
-//        }
+        int oldWebViewContentInsetBottom = self.webViewContentInsets.bottom;
+        int newBannerViewY = self.superViewFrame.size.height - oldWebViewContentInsetBottom - bannerViewFrame.size.height;
+        
+        self.bannerView.frame = CGRectMake(superViewFrame.origin.x,
+                                           newBannerViewY,
+                                           bannerViewFrame.size.width,
+                                           bannerViewFrame.size.height);
+        
+        
+        int newWebViewContentInsetBottom = oldWebViewContentInsetBottom + bannerViewFrame.size.height;
+        UIEdgeInsets newWebViewInsets = UIEdgeInsetsMake(webViewContentInsets.top,
+                                                         webViewContentInsets.left,
+                                                         newWebViewContentInsetBottom,
+                                                         webViewContentInsets.right);
+        
+        [[[self webView] scrollView] setContentInset:newWebViewInsets];
+        [[[self webView] scrollView] setScrollIndicatorInsets:newWebViewInsets];
+        
     }
-
-//    frame.origin = CGPointMake(xLocation, yLocation);
-//    bannerView_.frame = frame;
-//
-//    if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
-//        // The super view's frame hasn't been updated so use its width as the height.
-//        webViewFrame.size.height = superViewFrame.size.width - bannerViewFrame.size.height;
-//
-//    } else {
-//        webViewFrame.size.height = superViewFrame.size.height - bannerViewFrame.size.height;
-//    }
-//
-//    self.webView.frame = webViewFrame;
 }
 
 - (void)deviceOrientationChange:(NSNotification *)notification {
+    [self resizeViews];
+}
+
+- (void)webViewScrollViewContentInsetChanged:(NSNotification *)notification {
+    self.webViewContentInsets = [[[self webView] scrollView] contentInset];
     [self resizeViews];
 }
 
@@ -431,12 +421,18 @@
 #pragma mark Cleanup
 
 - (void)dealloc {
+    
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIDeviceOrientationDidChangeNotification
                                                   object:nil];
 
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"AGWebViewScrollViewContentInsetChanged"
+                                                  object:self.webView];
+     
+    
     bannerView_.delegate = nil;
     interstitial_.delegate = nil;
 }
