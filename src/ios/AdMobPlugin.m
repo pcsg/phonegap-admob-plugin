@@ -10,6 +10,8 @@
 @property CGRect bannerViewFrame;
 @property UIEdgeInsets webViewContentInsets;
 
+@property GADAdSize adSize;
+
 - (void)createGADBannerViewWithPubId:(NSString *)pubId
                           bannerType:(GADAdSize)adSize;
 - (void)createGADInterstitialWithPubId:(NSString *)pubId;
@@ -26,7 +28,7 @@
 @synthesize bannerView = bannerView_;
 @synthesize interstitial = interstitial_;
 
-@synthesize superViewFrame, bannerViewFrame, webViewContentInsets;
+@synthesize superViewFrame, bannerViewFrame, webViewContentInsets, adSize;
 
 #pragma mark Cordova JS bridge
 
@@ -66,7 +68,7 @@
     NSDictionary *params = [command argumentAtIndex:0];
     NSString *callbackId = command.callbackId;
     NSString *adSizeString = [params objectForKey:@"adSize"];
-    GADAdSize adSize = [self GADAdSizeFromString:adSizeString];
+    self.adSize = [self GADAdSizeFromString:adSizeString];
     positionAdAtTop_ = NO;
 
     // We don't need positionAtTop to be set, but we need values for adSize and
@@ -365,7 +367,12 @@
 #pragma mark GADBannerViewDelegate implementation
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
-    NSLog(@"%s: Received ad successfully.", __PRETTY_FUNCTION__);
+    NSLog(@"%s: Received ad successfully. adView.frame.size.height: %f", __PRETTY_FUNCTION__, adView.frame.size.height);
+    
+    //Hack to avoid the banner going full screen
+    //Constraint the frame
+    adView.frame = CGRectMake(adView.frame.origin.x, adView.frame.origin.y, self.adSize.size.width, self.adSize.size.height);
+    
     [self writeJavascript:@"cordova.fireDocumentEvent('onReceiveAd');"];
 }
 
