@@ -18,7 +18,7 @@ There are two calls needed to get AdMob Ads:
 
          admob.createBannerView(
              {
-               'publisherId': 'INSERT_YOUR_PUBLISHER_ID_HERE',
+               'publisherId': 'INSERT_YOUR_ADD_UNIT_ID_HERE',
                'adSize': admob.AD_SIZE.BANNER
              },
              successCallback,
@@ -61,7 +61,7 @@ If you want to create an Interstitials sur `createInterstitialView`
 
          admob.createInterstitialView(
          {
-           'publisherId': 'INSERT_YOUR_PUBLISHER_ID_HERE'
+           'publisherId': 'INSERT_YOUR_ADD_UNIT_ID_HERE'
          },
          successCallback,
          failureCallback);
