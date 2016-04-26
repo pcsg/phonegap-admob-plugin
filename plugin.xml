@@ -58,15 +58,25 @@
         <header-file src="src/ios/GADRequest.h" />
         <header-file src="src/ios/GADRequestError.h" />
 
-        <!-- Google AdMob 6.5.1 framework -->
-        <source-file src="src/ios/libGoogleAdMobAds.a" framework="true" />
-
-        <!-- iOS development frameworks need by Google AdMob 6.5.1 framework -->
-        <framework src="StoreKit.framework" />
-        <framework src="AudioToolbox.framework" />
-        <framework src="MessageUI.framework" />
-        <framework src="SystemConfiguration.framework" />
-        <framework src="CoreGraphics.framework" />
+        <!-- Google AdMob 7.7.1 framework -->
+        <framework src="src/ios/GoogleMobileAds.framework" custom="true" />
+       
         <framework src="AdSupport.framework" />
+        <framework src="AudioToolbox.framework" />
+        <framework src="AVFoundation.framework" />
+        <framework src="CoreGraphics.framework" />
+        <framework src="CoreLocation.framework" />
+        <framework src="CoreTelephony.framework" />
+        <framework src="EventKit.framework" />
+        <framework src="EventKitUI.framework" />
+        <framework src="Foundation.framework" />
+        <framework src="MediaPlayer.framework" />
+        <framework src="MessageUI.framework" />
+        <framework src="QuartzCore.framework" />
+        <framework src="StoreKit.framework" />
+        <framework src="SystemConfiguration.framework" />
+        <framework src="UIKit.framework" />
+
+
     </platform>
 </plugin>
