@@ -2,8 +2,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "GADBannerViewDelegate.h"
-#import "GADInterstitialDelegate.h"
+#import "<GoogleMobileAds/GADBannerViewDelegate.h>"
+#import "<GoogleMobileAds/GADInterstitialDelegate.h>"
 
 @class GADBannerView;
 @class GADInterstitial;
