@@ -1,4 +1,4 @@
-#import <GoogleMobileAds/AdMobPlugin.h>
+#import "AdMobPlugin.h"
 #import <GoogleMobileAds/GADAdMobExtras.h>
 #import <GoogleMobileAds/GADAdSize.h>
 #import <GoogleMobileAds/GADBannerView.h>
