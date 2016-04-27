@@ -1,8 +1,8 @@
-#import "AdMobPlugin.h"
-#import "GADAdMobExtras.h"
-#import "GADAdSize.h"
-#import "GADBannerView.h"
-#import "GADInterstitial.h"
+#import <GoogleMobileAds/AdMobPlugin.h>
+#import <GoogleMobileAds/GADAdMobExtras.h>
+#import <GoogleMobileAds/GADAdSize.h>
+#import <GoogleMobileAds/GADBannerView.h>
+#import <GoogleMobileAds/GADInterstitial.h>
 
 @interface AdMobPlugin ()
 
