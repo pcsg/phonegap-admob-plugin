@@ -1,5 +1,5 @@
 #import "AdMobPlugin.h"
-#import <GoogleMobileAds/GADAdMobExtras.h>
+#import <GoogleMobileAds/GADExtras.h>
 #import <GoogleMobileAds/GADAdSize.h>
 #import <GoogleMobileAds/GADBannerView.h>
 #import <GoogleMobileAds/GADInterstitial.h>
@@ -254,7 +254,7 @@
     }
 
     if (extrasDict) {
-        GADAdMobExtras *extras = [[GADAdMobExtras alloc] init];
+        GADExtras *extras = [[GADExtras alloc] init];
         NSMutableDictionary *modifiedExtrasDict = [[NSMutableDictionary alloc] initWithDictionary:extrasDict];
 
         [modifiedExtrasDict removeObjectForKey:@"cordova"];
