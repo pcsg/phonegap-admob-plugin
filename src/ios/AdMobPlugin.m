@@ -227,11 +227,15 @@
 
 - (void)createGADBannerViewWithPubId:(NSString *)pubId
                           bannerType:(GADAdSize)adSize {
+    NSLog(@"%@ 1", self.bannerView);
     self.bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
+    NSLog(@"%@ 2", self.bannerView);
     self.bannerView.adUnitID = pubId;
+    NSLog(@"%@ 3", self.bannerView);
     self.bannerView.delegate = self;
+    NSLog(@"%@ 4", self.bannerView);
     self.bannerView.rootViewController = self.viewController;
-    
+    NSLog(@"%@ self.bannerView.frame", self.bannerView.frame);
     self.bannerViewFrame = self.bannerView.frame;
 }
 
